@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import geometry.Point;
 import geometry.Rectangle;
 
 import java.awt.GridBagLayout;
@@ -20,6 +21,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
 public class DlgChangeRectangle extends JDialog {
@@ -30,7 +33,7 @@ public class DlgChangeRectangle extends JDialog {
 	private JTextField txtW;
 	private JTextField txtH;
 	private JButton btnEdge, btnFill;
-	private Rectangle rect, temp;
+	private Rectangle rect, tmp;
 	private boolean i;
 	private Color colorEdge, colorFill;
 
@@ -51,8 +54,25 @@ public class DlgChangeRectangle extends JDialog {
 	 * Create the dialog.
 	 */
 	public DlgChangeRectangle() {
+		 rect = new Rectangle(new Point(), 0, 0);
+		 tmp = new Rectangle();
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				btnEdge.setBackground(tmp.getColor());
+				btnFill.setBackground(tmp.getColorInterior());
+				txtX.setText(""+tmp.getUpperLeft().getX());
+				txtY.setText(""+tmp.getUpperLeft().getY());
+				txtW.setText(""+tmp.getWidth());
+				txtH.setText(""+tmp.getHeight());
+				colorEdge = tmp.getColor();
+				colorFill = tmp.getColorInterior();
+			}
+		});
 		setTitle("Change Rectangle");
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setModal(true);
+		setLocationRelativeTo(null);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -152,13 +172,13 @@ public class DlgChangeRectangle extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					colorEdge = JColorChooser.showDialog(null, "Edge color", colorEdge);
 					if(colorEdge == null) {
-						colorEdge = temp.getColor();
+						colorEdge = tmp.getColor();
 					}
 					btnEdge.setBackground(colorEdge);
 				}
 			});
 			GridBagConstraints gbc_btnEdge = new GridBagConstraints();
-			btnEdge.setBackground(Color.BLACK);
+			//btnEdge.setBackground(Color.BLACK);
 			gbc_btnEdge.insets = new Insets(0, 0, 5, 0);
 			gbc_btnEdge.anchor = GridBagConstraints.WEST;
 			gbc_btnEdge.gridx = 4;
@@ -166,18 +186,18 @@ public class DlgChangeRectangle extends JDialog {
 			contentPanel.add(btnEdge, gbc_btnEdge);
 		}
 		{
-			JButton btnFill = new JButton("");
+			btnFill = new JButton("");
 			btnFill.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					colorFill = JColorChooser.showDialog(null, "Choose color", colorFill);
 					if(colorFill == null) {
-						colorFill = temp.getColor();
+						colorFill = tmp.getColor();
 					}
 					btnFill.setBackground(colorFill);
 				}
 			});
 			GridBagConstraints gbc_btnFill = new GridBagConstraints();
-			btnFill.setBackground(Color.BLACK);
+			//btnFill.setBackground(Color.WHITE);
 			gbc_btnFill.anchor = GridBagConstraints.WEST;
 			gbc_btnFill.fill = GridBagConstraints.VERTICAL;
 			gbc_btnFill.gridx = 4;
@@ -223,7 +243,7 @@ public class DlgChangeRectangle extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						i = false;
 						rect = null;
-						temp = null;
+						tmp = null;
 						dispose();
 					}
 				});
@@ -241,12 +261,12 @@ public class DlgChangeRectangle extends JDialog {
 		this.rect = rect;
 	}
 
-	public Rectangle getTemp() {
-		return temp;
+	public Rectangle getTmp() {
+		return tmp;
 	}
 
-	public void setTemp(Rectangle temp) {
-		this.temp = temp;
+	public void setTmp(Rectangle tmp) {
+		this.tmp = tmp;
 	}
 
 	public boolean isI() {

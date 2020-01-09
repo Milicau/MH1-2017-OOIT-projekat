@@ -102,6 +102,8 @@ public class DlgCreateDonut extends JDialog {
 							iR = Integer.parseInt(txtInnerR.getText());
 							if(R <= 0 || iR <= 0) {
 								throw new Exception("Values must be positive!");
+							}else if(iR > R) {
+								throw new Exception("Inner radius must be smaller then outer radius!");
 							}
 							dispose();
 						}catch(NumberFormatException e1) {
@@ -124,6 +126,8 @@ public class DlgCreateDonut extends JDialog {
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						R = 0;
+						iR = 0;
 						dispose();
 					}
 				});

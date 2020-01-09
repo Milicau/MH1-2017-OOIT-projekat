@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import geometry.Line;
+import geometry.Point;
 
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
@@ -21,6 +22,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
 public class DlgChangeLine extends JDialog {
@@ -53,8 +56,22 @@ public class DlgChangeLine extends JDialog {
 	 * Create the dialog.
 	 */
 	public DlgChangeLine() {
+		linija = new Line(new Point(), new Point());
+		pom = new Line();
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				btnEdge.setBackground(pom.getColor());
+				txtStartX.setText(""+pom.getStartPoint().getX());
+				txtStartY.setText(""+pom.getStartPoint().getY());
+				txtEndX.setText(""+pom.getEndPoint().getX());
+				txtEndY.setText(""+pom.getEndPoint().getY());
+				boja = pom.getColor();
+			}
+		});
 		setModal(true);
 		setTitle("Change line");
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

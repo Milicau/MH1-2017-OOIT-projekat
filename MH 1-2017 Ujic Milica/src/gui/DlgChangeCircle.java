@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import geometry.Circle;
+import geometry.Point;
 
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -21,6 +22,9 @@ import java.awt.Insets;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.Dialog.ModalityType;
 
 public class DlgChangeCircle extends JDialog {
 
@@ -28,12 +32,12 @@ public class DlgChangeCircle extends JDialog {
 	private JTextField txtCenterX;
 	private JTextField txtCenterY;
 	private JTextField txtR;
-	JButton btnEdge, btnFill;
+	private JButton btnEdge, btnFill;
 	private boolean i;
 	private Color colorEdge;
 	private Color colorFill;
-	private Circle circle;
-	private Circle temp;
+	private Circle c;
+	private Circle tmp;
 
 	/**
 	 * Launch the application.
@@ -52,6 +56,23 @@ public class DlgChangeCircle extends JDialog {
 	 * Create the dialog.
 	 */
 	public DlgChangeCircle() {
+		c = new Circle(new Point(), 0);
+		tmp = new Circle();
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+				btnEdge.setBackground(tmp.getColor());
+				btnFill.setBackground(tmp.getColorInterior());
+				txtCenterX.setText(""+tmp.getCenter().getX());
+				txtCenterY.setText(""+tmp.getCenter().getY());
+				txtR.setText(""+tmp.getR());
+				colorEdge = tmp.getColor();
+				colorFill = tmp.getColorInterior();
+			}
+		});
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setModalityType(ModalityType.APPLICATION_MODAL);
+		setLocationRelativeTo(null);
 		setTitle("Change circle");
 		setModal(true);
 		setBounds(100, 100, 434, 269);
@@ -133,7 +154,7 @@ public class DlgChangeCircle extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					colorEdge = JColorChooser.showDialog(null, "Edge color", colorEdge);
 					if(colorEdge == null) {
-						colorEdge = temp.getColor();
+						colorEdge = tmp.getColor();
 					}
 					btnEdge.setBackground(colorEdge);
 				}
@@ -152,7 +173,7 @@ public class DlgChangeCircle extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					colorFill = JColorChooser.showDialog(null, "Fill color", colorFill);
 					if(colorFill == null) {
-						colorFill = temp.getColor();
+						colorFill = tmp.getColor();
 					}
 					btnFill.setBackground(colorFill);
 				}
@@ -174,17 +195,17 @@ public class DlgChangeCircle extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
-							circle.getCenter().setX(Integer.parseInt(txtCenterX.getText()));
-							circle.getCenter().setY(Integer.parseInt(txtCenterY.getText()));
+							c.getCenter().setX(Integer.parseInt(txtCenterX.getText()));
+							c.getCenter().setY(Integer.parseInt(txtCenterY.getText()));
 							try {
-								circle.setR(Integer.parseInt(txtR.getText()));
+								c.setR(Integer.parseInt(txtR.getText()));
 							} catch (Exception e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-							circle.setColor(colorEdge);
-							circle.setColorInterior(colorFill);
-							if(circle.getR() <= 0) {
+							c.setColor(colorEdge);
+							c.setColorInterior(colorFill);
+							if(c.getR() <= 0) {
 								throw new Exception ("You cannnot enter negative radius!");
 							}
 						
@@ -193,11 +214,11 @@ public class DlgChangeCircle extends JDialog {
 							catch(Exception e2) {
 							JOptionPane.showMessageDialog(null, e2.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
 						}finally {
-							btnEdge.setBackground(temp.getColor());
-							btnFill.setBackground(temp.getColorInterior());
-							txtCenterX.setText(""+temp.getCenter().getX());
-							txtCenterY.setText(""+temp.getCenter().getY());
-							txtR.setText(""+temp.getR());
+							btnEdge.setBackground(tmp.getColor());
+							btnFill.setBackground(tmp.getColorInterior());
+							txtCenterX.setText(""+tmp.getCenter().getX());
+							txtCenterY.setText(""+tmp.getCenter().getY());
+							txtR.setText(""+tmp.getR());
 						}
 						 
 						i = true;
@@ -214,8 +235,8 @@ public class DlgChangeCircle extends JDialog {
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						i = false;
-						temp = null;
-						circle = null;
+						tmp = null;
+						c = null;
 						dispose();
 					}
 				});
@@ -233,20 +254,20 @@ public class DlgChangeCircle extends JDialog {
 		this.i = i;
 	}
 
-	public Circle getCircle() {
-		return circle;
+	public Circle getC() {
+		return c;
 	}
 
-	public void setCircle(Circle circle) {
-		this.circle = circle;
+	public void setC(Circle c) {
+		this.c = c;
 	}
 
-	public Circle getTemp() {
-		return temp;
+	public Circle getTmp() {
+		return tmp;
 	}
 
-	public void setTemp(Circle temp) {
-		this.temp = temp;
+	public void setTmp(Circle tmp) {
+		this.tmp = tmp;
 	}
 	
 	

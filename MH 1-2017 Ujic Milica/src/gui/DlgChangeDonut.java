@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import geometry.Donut;
+import geometry.Point;
 
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -51,6 +52,9 @@ public class DlgChangeDonut extends JDialog {
 	 * Create the dialog.
 	 */
 	public DlgChangeDonut() {
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		donut = new Donut(new Point(), 0, 0);
+		temp = new Donut();
 		setTitle("Change donut");
 		setModal(true);
 		setBounds(100, 100, 450, 300);
@@ -156,7 +160,7 @@ public class DlgChangeDonut extends JDialog {
 				}
 			});
 			GridBagConstraints gbc_btnEdge = new GridBagConstraints();
-			btnEdge.setBackground(Color.BLACK);
+			//btnEdge.setBackground(Color.BLACK);
 			gbc_btnEdge.insets = new Insets(0, 0, 5, 0);
 			gbc_btnEdge.anchor = GridBagConstraints.WEST;
 			gbc_btnEdge.gridx = 4;
@@ -175,7 +179,7 @@ public class DlgChangeDonut extends JDialog {
 				}
 			});
 			GridBagConstraints gbc_btnFill = new GridBagConstraints();
-			btnFill.setBackground(Color.BLACK);
+			//btnFill.setBackground(Color.WHITE);
 			gbc_btnFill.anchor = GridBagConstraints.WEST;
 			gbc_btnFill.gridx = 4;
 			gbc_btnFill.gridy = 6;

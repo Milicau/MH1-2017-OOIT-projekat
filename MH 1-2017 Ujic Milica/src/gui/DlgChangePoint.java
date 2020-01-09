@@ -20,6 +20,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
 public class DlgChangePoint extends JDialog {
@@ -53,8 +55,20 @@ public class DlgChangePoint extends JDialog {
 		point = new Point();
 		temp = new Point();
 		
+
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				btnEdge.setBackground(temp.getColor());
+				txtX.setText(""+temp.getX());
+				txtY.setText(""+temp.getY());
+				color = temp.getColor();
+			}
+		});
+		
 		setModal(true);
 		setTitle("Change Point");
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 372, 202);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -142,6 +156,10 @@ public class DlgChangePoint extends JDialog {
 							point.setY(Integer.parseInt(txtY.getText()));
 							point.setColor(color);
 							
+							if(point.getX() < 0 || point.getY() < 0) {
+								throw new Exception ("Values must be positive!");
+							}
+							
 							i = true;
 							dispose();
 						}
@@ -154,7 +172,9 @@ public class DlgChangePoint extends JDialog {
 							btnEdge.setBackground(temp.getColor());
 							
 							i = false;
-						}	
+						}	catch(Exception x) {
+							JOptionPane.showMessageDialog(null, x.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				});
 				okButton.setActionCommand("OK");

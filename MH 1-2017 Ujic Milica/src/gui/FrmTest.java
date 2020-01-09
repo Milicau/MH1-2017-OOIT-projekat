@@ -120,7 +120,17 @@ public class FrmTest {
 		JButton btnDeleete = new JButton("Delete");
 		btnDeleete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if(pnlDrawing.getPosition() != -1) {
+					pnlDrawing.delete();
+					if(pnlDrawing.getShapes().isEmpty()) {
+						btnChange.setEnabled(false);
+						btnDeleete.setEnabled(false);
+					}
+				}
+				else {
+					JOptionPane.showOptionDialog(null, "Nothing is selected!", "Message",
+							JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[] {"OK"}, null);
+				}
 			}
 		});
 		btnDeleete.setEnabled(false);
@@ -140,7 +150,7 @@ public class FrmTest {
 						btnDeleete.setEnabled(false);
 					}else {
 						btnChange.setEnabled(true);
-						btnChange.setEnabled(true);
+						btnDeleete.setEnabled(true);
 					}
 					pnlDrawing.setChosen(Choice.Selection);
 				}else {

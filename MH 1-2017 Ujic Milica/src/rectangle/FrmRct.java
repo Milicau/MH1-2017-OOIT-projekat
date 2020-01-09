@@ -13,21 +13,20 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
-import java.util.ArrayDeque;
-import java.util.LinkedList;
+import java.util.Stack;
 import java.awt.event.ActionEvent;
 
 public class FrmRct {
 
 	private JFrame frmUjicMilicaMh;
-	DefaultListModel<Rectangle>dlm = new DefaultListModel<Rectangle>();
-	LinkedList<Rectangle> lifo = new LinkedList<Rectangle>();
-	JList list;
+	private Stack <Rectangle> rectangles;
+	private DefaultListModel<Rectangle> dlm = new DefaultListModel<Rectangle>();
+	private JList list;
+	private JScrollPane scrollPane;
 	private int x, y, w, h;
 
 	/**
@@ -50,7 +49,9 @@ public class FrmRct {
 	 * Create the application.
 	 */
 	public FrmRct() {
+		rectangles= new Stack<Rectangle>();
 		initialize();
+		frmUjicMilicaMh.setVisible(true);
 	}
 
 	/**
@@ -81,6 +82,7 @@ public class FrmRct {
 							throw new Exception("You cannot enter negative value");
 						}
 						Rectangle r1 = new Rectangle(new Point(x, y), w, h);
+						rectangles.push(r1);
 						dlm.addElement(r1);
 						/*Rectangle r1 = new Rectangle(new Point(Integer.parseInt(dlg.getTxtUpperLeftX().getText().toString()),
 							Integer.parseInt(dlg.getTxtUpperLeftY().getText().toString())), Integer.parseInt(dlg.getTxtWidth().getText().toString()),
@@ -112,17 +114,20 @@ public class FrmRct {
 					dlg.getTxtHeight().setText(Integer.toString(temp.getHeight()));
 					dlg.getTxtWidth().setText(Integer.toString(temp.getWidth()));
 					dlg.setVisible(true);
-					if(dlg.isOk)
-					dlm.removeElementAt(list.getSelectedIndex());
+					if(dlg.isOk) {
+						rectangles.pop();
+						dlm.remove(dlm.size()-1);
+					}
+					
 				}
 			}
 		});
 		pnlSouth.add(btnRemove);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		frmUjicMilicaMh.getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
-		list = new JList();
+		list = new JList<String>();
 		scrollPane.setViewportView(list);
 		list.setModel(dlm);
 		

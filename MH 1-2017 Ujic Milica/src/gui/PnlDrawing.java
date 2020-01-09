@@ -263,19 +263,19 @@ public class PnlDrawing extends JPanel {
 		else if(shapes.get(pos) instanceof Circle) {
 			DlgChangeCircle changeCircle = new DlgChangeCircle();
 			
-			changeCircle.setTemp((Circle)shapes.get(pos));
+			changeCircle.setTmp((Circle)shapes.get(pos));
 			
 			changeCircle.setVisible(true);
 			
 			if(changeCircle.isI()==true) 
-				shapes.set(pos, changeCircle.getCircle());
+				shapes.set(pos, changeCircle.getC());
 		}
 
 		//RECTANGLE
 		else if(shapes.get(pos) instanceof Rectangle) {
 			DlgChangeRectangle changeRectangle = new DlgChangeRectangle();
 			
-			changeRectangle.setTemp((Rectangle)shapes.get(pos));
+			changeRectangle.setTmp((Rectangle)shapes.get(pos));
 			
 			changeRectangle.setVisible(true);
 			
