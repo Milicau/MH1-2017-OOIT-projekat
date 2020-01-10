@@ -22,6 +22,9 @@ import java.awt.Insets;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.Dialog.ModalityType;
 
 public class DlgChangeDonut extends JDialog {
 
@@ -31,7 +34,7 @@ public class DlgChangeDonut extends JDialog {
 	private JTextField txtIR;
 	private JTextField txtOR;
 	private Color colorE, colorI;
-	private Donut temp, donut;
+	private Donut tmp, donut;
 	private boolean i;
 	private JButton btnEdge, btnFill;
 
@@ -52,11 +55,26 @@ public class DlgChangeDonut extends JDialog {
 	 * Create the dialog.
 	 */
 	public DlgChangeDonut() {
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		donut = new Donut(new Point(), 0, 0);
-		temp = new Donut();
-		setTitle("Change donut");
 		setModal(true);
+		setModalityType(ModalityType.APPLICATION_MODAL);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+				btnEdge.setBackground(tmp.getColor());
+				btnFill.setBackground(tmp.getColorInterior());
+				txtX.setText(""+tmp.getCenter().getX());
+				txtY.setText(""+tmp.getCenter().getY());
+				txtIR.setText(""+tmp.getInnerR());
+				txtOR.setText(""+tmp.getR());
+				colorE = tmp.getColor();
+				colorI = tmp.getColorInterior();
+			}
+		});
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setLocationRelativeTo(null);
+		donut = new Donut(new Point(), 0, 0);
+		tmp = new Donut();
+		setTitle("Change donut");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -104,12 +122,12 @@ public class DlgChangeDonut extends JDialog {
 			txtY.setColumns(10);
 		}
 		{
-			JLabel lblNewLabel = new JLabel("Inner radius:");
-			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-			gbc_lblNewLabel.gridx = 2;
-			gbc_lblNewLabel.gridy = 3;
-			contentPanel.add(lblNewLabel, gbc_lblNewLabel);
+			JLabel lblInnerRadius = new JLabel("Inner radius:");
+			GridBagConstraints gbc_lblInnerRadius = new GridBagConstraints();
+			gbc_lblInnerRadius.insets = new Insets(0, 0, 5, 5);
+			gbc_lblInnerRadius.gridx = 2;
+			gbc_lblInnerRadius.gridy = 3;
+			contentPanel.add(lblInnerRadius, gbc_lblInnerRadius);
 		}
 		{
 			txtIR = new JTextField();
@@ -154,7 +172,7 @@ public class DlgChangeDonut extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					colorE = JColorChooser.showDialog(null, "Edge color", colorE);
 					if(colorE == null) {
-						colorE = temp.getColor();
+						colorE = tmp.getColor();
 					}
 					btnEdge.setBackground(colorE);
 				}
@@ -173,7 +191,7 @@ public class DlgChangeDonut extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					colorI = JColorChooser.showDialog(null, "Fill color", colorI);
 					if(colorI == null) {
-						colorI = temp.getColor();
+						colorI = tmp.getColor();
 					}
 					btnFill.setBackground(colorI);
 				}
@@ -216,18 +234,19 @@ public class DlgChangeDonut extends JDialog {
 								throw new Exception("Inner radius must be smaller then outer radius!");
 							else if(donut.getInnerR()==donut.getR())
 								throw new Exception("Values must be different!");
+							i = true;
 							dispose();
 						}catch(NumberFormatException e1) {
 						JOptionPane.showMessageDialog(null, "Invalid enter", "Error", JOptionPane.ERROR_MESSAGE);
 					}catch(Exception e2) {
 						JOptionPane.showMessageDialog(null, e2.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}finally {
-						btnEdge.setBackground(temp.getColor());
-						btnFill.setBackground(temp.getColorInterior());
-						txtX.setText(""+temp.getCenter().getX());
-						txtY.setText(""+temp.getCenter().getY());
-						txtOR.setText(""+temp.getR());
-						txtIR.setText(""+temp.getInnerR());
+						btnEdge.setBackground(tmp.getColor());
+						btnFill.setBackground(tmp.getColorInterior());
+						txtX.setText(""+tmp.getCenter().getX());
+						txtY.setText(""+tmp.getCenter().getY());
+						txtOR.setText(""+tmp.getR());
+						txtIR.setText(""+tmp.getInnerR());
 					}
 				}});
 				okButton.setActionCommand("OK");
@@ -240,7 +259,7 @@ public class DlgChangeDonut extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						i = false;
 						donut = null;
-						temp = null;
+						tmp = null;
 						dispose();
 					}
 				});
@@ -266,29 +285,29 @@ public class DlgChangeDonut extends JDialog {
 		this.colorI = colorI;
 	}
 
-	public Donut getTemp() {
-		return temp;
-	}
+	/*
+	 * public Donut getTmp() { return temp; }
+	 */
 
-	public void setTemp(Donut temp) {
-		this.temp = temp;
+	public void setTmp(Donut tmp) {
+		this.tmp = tmp;
 	}
 
 	public Donut getDonut() {
 		return donut;
 	}
 
-	public void setDonut(Donut donut) {
-		this.donut = donut;
-	}
+	/*
+	 * public void setDonut(Donut donut) { this.donut = donut; }
+	 */
 
 	public boolean isI() {
 		return i;
 	}
 
-	public void setI(boolean i) {
-		this.i = i;
-	}
+	/*
+	 * public void setI(boolean i) { this.i = i; }
+	 */
 	
 
 }

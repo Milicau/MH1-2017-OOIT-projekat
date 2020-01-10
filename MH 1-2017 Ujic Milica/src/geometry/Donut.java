@@ -24,6 +24,14 @@ public class Donut extends Circle{
 		this(center, r, innerR);
 		setColor(color);
 	}
+	
+	public boolean equals(Object obj) {
+		if(obj instanceof Donut) {
+			Donut temp = (Donut)obj;
+			return center.equals(temp.center) && innerR == temp.innerR;
+		}
+		return false;
+	}
 
 	@Override
 	public String toString() {

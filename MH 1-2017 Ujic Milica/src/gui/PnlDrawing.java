@@ -229,6 +229,17 @@ public class PnlDrawing extends JPanel {
 		}
 	}	
 	
+	public int getPosition() {
+		int i = 0;
+		
+		for(Shape o: shapes) {
+			if(o.isSelected())
+				return i;
+			i++;
+		}
+		return -1;
+	}
+	
 	//CHANGE
 	public void change() {
 		int pos = getPosition();
@@ -287,25 +298,18 @@ public class PnlDrawing extends JPanel {
 		  else if(shapes.get(pos) instanceof Donut) {
 			  DlgChangeDonut changeDonut = new DlgChangeDonut();
 		  
-		  changeDonut.setTemp((Donut)shapes.get(pos));
+		  changeDonut.setTmp((Donut)shapes.get(pos));
 		  
 		  changeDonut.setVisible(true);
 		  
-		  if(changeDonut.isI()==true) shapes.set(pos, changeDonut.getDonut()); }
+		  if(changeDonut.isI()==true) 
+			  shapes.set(pos, changeDonut.getDonut()); 
+		  }
 		 
 		
 	}
 	
-	public int getPosition() {
-		int i = 0;
-		
-		for(Shape o: shapes) {
-			if(o.isSelected())
-				return i;
-			i++;
-		}
-		return -1;
-	}
+
 
 	public ArrayList<Shape> getShapes() {
 		return shapes;
